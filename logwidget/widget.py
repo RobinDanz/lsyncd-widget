@@ -1,8 +1,10 @@
-from PyQt6.QtCore import Qt, QPropertyAnimation, QPoint, QEasingCurve
-from PyQt6.QtWidgets import QLabel, QWidget, QGraphicsColorizeEffect, QGraphicsOpacityEffect, QVBoxLayout, QHBoxLayout
-from PyQt6.QtGui import QColor
+from PyQt6.QtCore import Qt, QPoint, QTimer
+from PyQt6.QtWidgets import QLabel, QWidget, QVBoxLayout, QHBoxLayout
+from PyQt6.QtGui import QPixmap
+
 
 from logwidget.watcher import LogWatcher
+from logwidget.const import CHECK_ICON, SYNC_ICON
 
 class LsyncdWidget(QWidget):
     def __init__(self, logfile):
@@ -83,39 +85,34 @@ class StatusWidget(QWidget):
         layout = QHBoxLayout(self)
         layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         
-        self.dot = QLabel(self)
-        self.dot.setObjectName('dot')
-        self.dot.setFixedSize(16, 16)
-        self.dot.setStyleSheet('border-radius: 8px; background-color: green;')
+        # self.dot = QLabel(self)
+        # self.dot.setObjectName('dot')
+        # self.dot.setFixedSize(16, 16)
+        # self.dot.setStyleSheet('border-radius: 8px; background-color: green;')
         
-        self.opacity = QGraphicsOpacityEffect()
-        self.opacity.setOpacity(1)
-        self.dot.setGraphicsEffect(self.opacity)
-        
-        self.animation = QPropertyAnimation(self.opacity, b'opacity', self)
-        self.animation.setDuration(1500)
-        self.animation.setStartValue(0)
-        self.animation.setKeyValueAt(0.5, 1)
-        self.animation.setEndValue(0)
-        self.animation.setEasingCurve(QEasingCurve.Type.InOutQuad)
-        self.animation.setLoopCount(-1)
+        self.icon = QLabel()
+        self.icon.setFixedSize(20, 20)
+        self.icon.setScaledContents(True)
+        self.icon.setPixmap(QPixmap(CHECK_ICON))
         
         self.label = QLabel('In Sync.', self)
+        # self.timer = QTimer(self)
         
-        layout.addWidget(self.dot)
+        # layout.addWidget(self.dot)
+        layout.addWidget(self.icon)
         layout.addWidget(self.label)
         
+    # def toggle_opacity(self):
+    #     self.visible = not self.visible
+    #     self.dot.setVisible(self.visible)
         
     def animate(self):
-        self.dot.setStyleSheet("border-radius: 8px; background-color: red;")
-        # self.effect.setColor(QColor("red"))
+        self.icon.setPixmap(QPixmap(SYNC_ICON))
         self.label.setText('Processing...')
-        self.animation.start()
+        # self.timer.start(700)
         
-    def stop_animate(self):
-        self.animation.stop()
-        self.opacity.setOpacity(1)
-        self.dot.setStyleSheet("border-radius: 8px; background-color: green;")
+    def stop_animate(self): 
+        self.icon.setPixmap(QPixmap(CHECK_ICON))
         self.label.setText('In Sync.')
         
 class HeaderWidget(QWidget):

@@ -14,7 +14,7 @@ ifeq ($(shell uname),Darwin)
 else ifeq ($(shell uname),Linux)
 	@echo "OS: Linux. Installing required packages."
 	sudo apt update -qq
-	sudo apt install -y python3-PyQt6 python3-watchdog
+	sudo apt install -y python3-pyqt6 python3-watchdog
 else
 	$(error Système non supporté)
 endif
