@@ -7,6 +7,8 @@ from watchdog.observers import Observer
 
 
 class LogWatcher(QThread):
+    """Watches the Lsyncd logfile using watchdog. Runs in a separate thread
+    """
     copy_start = pyqtSignal()
     copy_end = pyqtSignal()
     

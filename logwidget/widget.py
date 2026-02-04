@@ -7,6 +7,9 @@ from logwidget.watcher import LogWatcher
 from logwidget.const import CHECK_ICON, SYNC_ICON
 
 class LsyncdWidget(QWidget):
+    """
+    Container widget
+    """
     def __init__(self, logfile):
         super().__init__()
         self.setWindowFlags(
@@ -28,6 +31,8 @@ class LsyncdWidget(QWidget):
         self.watcher.start()
     
     def make(self):
+        """Creates interface
+        """
         outer_layout = QVBoxLayout(self)
         outer_layout.setContentsMargins(0, 0, 0, 0)
         
@@ -49,21 +54,29 @@ class LsyncdWidget(QWidget):
         outer_layout.addWidget(self.container)
         
     def load_style(self):
+        """Loads styles from .qss file
+        """
         with open('./assets/styles.qss', 'r') as f:
             self.setStyleSheet(f.read())
     
     def mousePressEvent(self, event):
+        """Handles mousePressEvent for moving
+        """
         if event.button() == Qt.MouseButton.LeftButton:
             self._mouse_dragging = True
             self._drag_position = event.globalPosition().toPoint() - self.frameGeometry().topLeft()
             event.accept()
 
     def mouseMoveEvent(self, event):
+        """Handles mouseMoveEvent for moving
+        """
         if self._mouse_dragging and event.buttons() & Qt.MouseButton.LeftButton:
             self.move(event.globalPosition().toPoint() - self._drag_position)
             event.accept()
 
     def mouseReleaseEvent(self, event):
+        """Handles mouseReleaseEvent to stop moving :)
+        """
         if event.button() == Qt.MouseButton.LeftButton:
             self._mouse_dragging = False
             event.accept()
@@ -80,15 +93,12 @@ class LsyncdWidget(QWidget):
         super().closeEvent(event)
         
 class StatusWidget(QWidget):
+    """Internal widget
+    """
     def __init__(self):
         super().__init__()
         layout = QHBoxLayout(self)
         layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
-        
-        # self.dot = QLabel(self)
-        # self.dot.setObjectName('dot')
-        # self.dot.setFixedSize(16, 16)
-        # self.dot.setStyleSheet('border-radius: 8px; background-color: green;')
         
         self.icon = QLabel()
         self.icon.setFixedSize(20, 20)
@@ -96,22 +106,19 @@ class StatusWidget(QWidget):
         self.icon.setPixmap(QPixmap(CHECK_ICON))
         
         self.label = QLabel('In Sync.', self)
-        # self.timer = QTimer(self)
-        
-        # layout.addWidget(self.dot)
+
         layout.addWidget(self.icon)
         layout.addWidget(self.label)
         
-    # def toggle_opacity(self):
-    #     self.visible = not self.visible
-    #     self.dot.setVisible(self.visible)
-        
     def animate(self):
+        """Start animation (changes icon)
+        """
         self.icon.setPixmap(QPixmap(SYNC_ICON))
         self.label.setText('Processing...')
-        # self.timer.start(700)
         
     def stop_animate(self): 
+        """Ends animation (changes icon)
+        """
         self.icon.setPixmap(QPixmap(CHECK_ICON))
         self.label.setText('In Sync.')
         
