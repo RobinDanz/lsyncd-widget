@@ -1,8 +1,13 @@
 # lsyncd-widget
-Little PyQt6 widget to check lsyncd status.
+Little PyQt6 widget that analyses the [lsyncd](https://github.com/lsyncd/lsyncd) logfile and shows the sync status based on the logs in real time.
 
-Currently check if there is a sync running or not.
+![insync](images/widget_insync.PNG)  
 
+![processing](images/widget_processing.PNG)
+
+## Features
+* Realtime log reading based on filesystem events
+* Minimal interface
 
 ## Usage
 
@@ -25,4 +30,14 @@ LOG_FILE=/path/to/lsyncd/logs
 ```
 python main.py
 ```
+
+## Test
+Follow the next steps to test the widget without having an lsyncd setup:
+1. Create an empty text file somewhere
+2. Point the `LOG_FILE` variable in the .env to that text file
+3. Run the widget: `python main.py`
+4. Insert `Normal: Calling rsync` into the text file and save it
+5. Insert `Normal: Finished` into the text file and save it
+
+You should see the widget interface change accordingly !
 
